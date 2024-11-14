@@ -1,0 +1,5 @@
+package com.remedios.curso.controllers;
+
+public class HelloWord {
+
+}
