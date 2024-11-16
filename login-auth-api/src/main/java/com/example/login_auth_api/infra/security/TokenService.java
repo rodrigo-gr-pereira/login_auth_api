@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
-    @Value("${api.security.tokem.secret}")
+    @Value("${api.security.token.secret}")
     private String secret;
-    public String generateToken(User user) {
+    public String generateToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
@@ -27,8 +27,8 @@ public class TokenService {
                     .withExpiresAt(this.generateExpirationDate())
                     .sign(algorithm);
             return token;
-        } catch (JWTCreationException exception) {
-            throw new RuntimeException("Erro while authenticating");
+        } catch (JWTCreationException exception){
+            throw new RuntimeException("Error while authenticating");
         }
     }
 
@@ -40,11 +40,12 @@ public class TokenService {
                     .build()
                     .verify(token)
                     .getSubject();
-        }catch (JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             return null;
         }
     }
-        private Instant generateExpirationDate() {
-            return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+
+    private Instant generateExpirationDate(){
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
-        }
+}
